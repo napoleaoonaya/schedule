@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ScheduleApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void main() {
+		ScheduleApplication.main(new String[]{});
 	}
 
 }
