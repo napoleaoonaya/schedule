@@ -14,33 +14,36 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/person")
 public class PersonController {
-    
+
     @Autowired
     private PersonImplementationService repository;
 
     @GetMapping
-    public ResponseEntity<Iterable<Person>> findAllPerson(){
+    public ResponseEntity<Iterable<Person>> findAllPerson() {
         new ResponseEntity<>(HttpStatus.OK);
         return ResponseEntity.ok(repository.findAllPerson());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Person>> findPersonById(@PathVariable Long id){
+    public ResponseEntity<Optional<Person>> findPersonById(@PathVariable Long id) {
         PersonDTO personDTO = new PersonDTO();
         personDTO.setId(id);
 
-        var optional = repository.findPersonById(personDTO);
+        Person person = new Person();
+        person.setId(personDTO.getId());
 
-        if(optional.isEmpty()){
+        var optional = repository.findPersonById(person);
+
+        if (optional.isEmpty()) {
             return new ResponseEntity<Optional<Person>>(HttpStatus.NO_CONTENT);
         }
 
         new ResponseEntity<>(HttpStatus.OK);
-        return ResponseEntity.ok().body(repository.findPersonById(personDTO));
+        return ResponseEntity.ok().body(repository.findPersonById(person));
     }
 
     @PostMapping
-    public ResponseEntity<Person> savePerson(@RequestBody PersonDTO personDTO){
+    public ResponseEntity<Person> savePerson(@RequestBody PersonDTO personDTO) {
         Person person = new Person();
         person.setAddress(personDTO.getAddress());
         person.setCell(personDTO.getCell());
@@ -54,33 +57,37 @@ public class PersonController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletePersonById(@PathVariable Long id){
+    public void deletePersonById(@PathVariable Long id) {
         PersonDTO personDTO = new PersonDTO();
         personDTO.setId(id);
 
-        var optional = repository.findPersonById(personDTO);
+        Person person = new Person();
+        person.setId(personDTO.getId());
 
-        if(optional.isEmpty()){
+        var optional = repository.findPersonById(person);
+
+        if (optional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There is no this person!");
         }
-        repository.deletePersonById(personDTO);
+        repository.deletePersonById(person);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody PersonDTO personDTO){
+    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody PersonDTO personDTO) {
 
 
         PersonDTO personId = new PersonDTO();
         personId.setId(id);
 
-       
-        var optional = repository.findPersonById(personId);
+        Person person = new Person();
+        person.setId(personDTO.getId());
 
-        if(optional.isEmpty()){
+        var optional = repository.findPersonById(person);
+
+        if (optional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no this person!");
         }
 
-        Person person = new Person();
         person.setId(personId.getId());
         person.setAddress(personDTO.getAddress());
         person.setCell(personDTO.getCell());
@@ -91,6 +98,6 @@ public class PersonController {
         person.setTelephone(personDTO.getTelephone());
         new ResponseEntity<>(HttpStatus.CREATED);
         return ResponseEntity.ok().body(repository.savePerson(person));
-        
+
     }
 }
