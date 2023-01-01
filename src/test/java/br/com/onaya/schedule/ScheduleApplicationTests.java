@@ -6,9 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ScheduleApplicationTests {
 
-	@Test
-	void main() {
-		ScheduleApplication.main(new String[]{});
-	}
+    @Test
+    void main() {
+        ScheduleApplication.main(new String[]{});
+    }
 
 }
